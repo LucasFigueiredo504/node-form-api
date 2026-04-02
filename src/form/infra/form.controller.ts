@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { submitFormUseCase } from "../application/submit-form.usecase";
 
 type FormBody = {
   name: string;
@@ -9,7 +10,7 @@ type FormBody = {
 
 export async function formController(app: FastifyInstance) {
   app.post(
-    "/reservation",
+    "/submit",
     {
       config: {
         rateLimit: {
@@ -31,8 +32,13 @@ export async function formController(app: FastifyInstance) {
         });
       }
 
-      // simulate saving / processing
-      console.log("New reservation:", request.body);
+      const result = await submitFormUseCase({ name, email, date, message });
+
+      if (result.status === "error") {
+        return reply.status(400).send({
+          error: result.error ?? "Something went wrong",
+        });
+      }
 
       return reply.send({
         message: "Reservation received ✅",
