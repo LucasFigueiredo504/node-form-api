@@ -14,8 +14,8 @@ export async function submitFormUseCase(body: FormBody) {
 
   try {
     const response = await resend.emails.send({
-      from: "onboarding@resend.dev", // change later to your domain
-      to: process.env.CLENT_EMAIL as string, // restaurant owner email
+      from: "onboarding@resend.dev",
+      to: process.env.CLENT_EMAIL as string,
       subject: "New Reservation 📅",
       html: `
         <h2>New Reservation</h2>

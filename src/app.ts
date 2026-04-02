@@ -8,9 +8,8 @@ const app = Fastify({
 });
 
 async function buildServer() {
-  // Register rate limit plugin
   await app.register(rateLimit, {
-    max: 10, // max requests
+    max: 6,
     timeWindow: "1 minute",
   });
 
