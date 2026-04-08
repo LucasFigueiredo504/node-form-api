@@ -14,7 +14,7 @@ async function buildServer() {
   });
 
   //routes
-  await app.register(formController, { prefix: "/api" });
+  await app.register(formController, { prefix: "/v1" });
 
   return app;
 }
