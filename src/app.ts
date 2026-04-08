@@ -1,6 +1,7 @@
 import "dotenv/config";
 import Fastify from "fastify";
 import rateLimit from "@fastify/rate-limit";
+import cors from "@fastify/cors";
 import { formController } from "./form/infra/form.controller";
 
 const app = Fastify({
@@ -8,12 +9,18 @@ const app = Fastify({
 });
 
 async function buildServer() {
+  await app.register(cors, {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  });
+
+  // Rate limiting
   await app.register(rateLimit, {
     max: 6,
     timeWindow: "1 minute",
   });
 
-  //routes
+  // Routes
   await app.register(formController, { prefix: "/v1" });
 
   return app;
