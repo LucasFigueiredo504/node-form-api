@@ -2,7 +2,7 @@ import "dotenv/config";
 import Fastify from "fastify";
 import rateLimit from "@fastify/rate-limit";
 import cors from "@fastify/cors";
-import { formController } from "./form/infra/form.controller";
+import { formController } from "./contact/infra/form.controller";
 
 const app = Fastify({
   logger: true,
