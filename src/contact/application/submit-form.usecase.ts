@@ -13,15 +13,15 @@ type FormBody = {
 const domainMap: Record<string, { from: string; to: string }> = {
   /*   "http://localhost:5173": {
     from: "Tellar Heaven <noreply@tellarheaven.com.br>",
-    to: process.env.CLENT_EMAIL_1 as string,
+    to: process.env.CLIENT_EMAIL_1 as string,
   }, */
   "http://localhost:5173": {
     from: "onboarding@resend.dev",
-    to: process.env.CLENT_EMAIL_1 as string,
+    to: process.env.CLIENT_EMAIL_1 as string,
   },
   "https://site2.com": {
     from: "Site 2 <noreply@site2.com>",
-    to: process.env.CLENT_EMAIL_2 as string,
+    to: process.env.CLIENT_EMAIL_1 as string,
   },
 };
 
