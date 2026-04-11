@@ -7,6 +7,8 @@ type FormBody = {
   message: string;
 };
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function formController(app: FastifyInstance) {
   app.post(
     "/submit",
@@ -24,10 +26,15 @@ export async function formController(app: FastifyInstance) {
     ) => {
       const { name, email, message } = request.body;
 
-      // basic validation
       if (!name || !email || !message) {
         return reply.status(400).send({
           error: "Missing fields",
+        });
+      }
+
+      if (!emailRegex.test(email)) {
+        return reply.status(400).send({
+          error: "Invalid email",
         });
       }
 
@@ -38,7 +45,7 @@ export async function formController(app: FastifyInstance) {
       });
 
       if (result.status === "error") {
-        return reply.status(400).send({
+        return reply.status(result.code).send({
           error: result.error ?? "Something went wrong",
         });
       }

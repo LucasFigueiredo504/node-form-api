@@ -9,10 +9,20 @@ type FormBody = {
   message: string;
 };
 
-const domainMap: Record<string, string> = {
-  "https://tellarheaven.com.br": "Tellar Heaven <noreply@tellarheaven.com.br>",
-  "https://site2.com": "Site 2 <noreply@site2.com>",
+const domainMap: Record<string, { from: string; to: string }> = {
+  "https://tellarheaven.com.br": {
+    from: "Tellar Heaven <noreply@tellarheaven.com.br>",
+    to: process.env.CLENT_EMAIL_1 as string,
+  },
+  "https://site2.com": {
+    from: "Site 2 <noreply@site2.com>",
+    to: "your@email.com",
+  },
 };
+
+function escapeHtml(str: string) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
 export async function submitFormUseCase(
   request: FastifyRequest,
@@ -21,39 +31,52 @@ export async function submitFormUseCase(
   const { name, email, message } = body;
 
   const apiKey = request.headers["x-api-key"];
-  if (apiKey !== process.env.API_KEY) {
-    return { status: "error", error: "Unauthorized" };
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return { status: "error", code: 401, error: "Unauthorized" };
   }
 
   const origin = request.headers.origin;
   if (!origin) {
-    return { status: "error", error: "Missing origin" };
+    return { status: "error", code: 400, error: "Missing origin" };
   }
 
-  const from = domainMap[origin];
-  if (!from) {
-    return { status: "error", error: "Unauthorized domain" };
+  const config = domainMap[origin];
+  if (!config) {
+    return { status: "error", code: 403, error: "Unauthorized domain" };
   }
+
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeMessage = escapeHtml(message);
 
   try {
     const response = await resend.emails.send({
-      from,
-      to: email,
+      from: config.from,
+      to: config.to,
+      replyTo: email,
       subject: "New Message ✉",
       html: `
         <h2>New Message</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong> ${message}</p>
+        <p><strong>Name:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
+        <p><strong>Message:</strong> ${safeMessage}</p>
       `,
     });
 
     if (response.error) {
-      return { status: "error", error: response.error.message };
+      return {
+        status: "error",
+        code: 500,
+        error: response.error.message,
+      };
     }
 
-    return { status: "success" };
+    return { status: "success", code: 200 };
   } catch {
-    return { status: "error", error: "Failed to send email" };
+    return {
+      status: "error",
+      code: 500,
+      error: "Failed to send email",
+    };
   }
 }
