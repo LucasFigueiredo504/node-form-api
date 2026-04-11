@@ -10,13 +10,17 @@ type FormBody = {
 };
 
 const domainMap: Record<string, { from: string; to: string }> = {
-  "https://tellarheaven.com.br": {
+  /*   "http://localhost:5173": {
     from: "Tellar Heaven <noreply@tellarheaven.com.br>",
+    to: process.env.CLENT_EMAIL_1 as string,
+  }, */
+  "http://localhost:5173": {
+    from: "onboarding@resend.dev",
     to: process.env.CLENT_EMAIL_1 as string,
   },
   "https://site2.com": {
     from: "Site 2 <noreply@site2.com>",
-    to: "your@email.com",
+    to: process.env.CLENT_EMAIL_2 as string,
   },
 };
 
@@ -31,6 +35,7 @@ export async function submitFormUseCase(
   const { name, email, message } = body;
 
   const apiKey = request.headers["x-api-key"];
+  console.log(apiKey);
   if (!apiKey || apiKey !== process.env.API_KEY) {
     return { status: "error", code: 401, error: "Unauthorized" };
   }
