@@ -1,5 +1,6 @@
 import { FastifyRequest } from "fastify";
 import { Resend } from "resend";
+import { buildContactEmailHtml } from "../templates/contact-email-template";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -59,13 +60,8 @@ export async function submitFormUseCase(
       from: config.from,
       to: config.to,
       replyTo: email,
-      subject: "New Message ✉",
-      html: `
-        <h2>New Message</h2>
-        <p><strong>Name:</strong> ${safeName}</p>
-        <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Message:</strong> ${safeMessage}</p>
-      `,
+      subject: `✉ New message from ${safeName}`,
+      html: buildContactEmailHtml(safeName, safeEmail, safeMessage),
     });
 
     if (response.error) {
