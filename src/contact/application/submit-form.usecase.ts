@@ -19,7 +19,7 @@ const domainMap: Record<string, { from: string; to: string }> = {
     from: "onboarding@resend.dev",
     to: process.env.CLIENT_EMAIL_1 as string,
   },  
-  "https://artworks-portifolio.vercel.app/": {
+  "https://artworks-portifolio.vercel.app": {
     from: "onboarding@resend.dev",
     to: process.env.CLIENT_EMAIL_1 as string,
   },
