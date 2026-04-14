@@ -11,14 +11,14 @@ type FormBody = {
 };
 
 const domainMap: Record<string, { from: string; to: string }> = {
-  /*   "http://localhost:5173": {
-    from: "Tellar Heaven <noreply@tellarheaven.com.br>",
+  "https://www.tellarheaven.com.br": {
+    from: "Tellar Heaven <noreply@contact.tellarheaven.com.br>",
     to: process.env.CLIENT_EMAIL_1 as string,
-  }, */
+  },
   "http://localhost:5173": {
     from: "onboarding@resend.dev",
     to: process.env.CLIENT_EMAIL_1 as string,
-  },  
+  },
   "https://artworks-portifolio.vercel.app": {
     from: "onboarding@resend.dev",
     to: process.env.CLIENT_EMAIL_1 as string,

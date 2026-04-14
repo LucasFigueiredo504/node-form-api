@@ -10,7 +10,10 @@ const app = Fastify({
 
 async function buildServer() {
   await app.register(cors, {
-    origin: "*",
+    origin:
+      process.env.ENVIROMENT === "dev"
+        ? "*"
+        : "https://www.tellarheaven.com.br",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   });
 
