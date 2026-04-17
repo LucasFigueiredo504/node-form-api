@@ -15,6 +15,10 @@ const domainMap: Record<string, { from: string; to: string }> = {
     from: "Tellar Heaven <noreply@contact.tellarheaven.com.br>",
     to: process.env.CLIENT_EMAIL_1 as string,
   },
+  "https://tellarheaven.com.br": {
+    from: "Tellar Heaven <noreply@contact.tellarheaven.com.br>",
+    to: process.env.CLIENT_EMAIL_1 as string,
+  },
   "http://localhost:5173": {
     from: "onboarding@resend.dev",
     to: process.env.CLIENT_EMAIL_1 as string,
