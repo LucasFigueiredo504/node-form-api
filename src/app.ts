@@ -13,7 +13,7 @@ async function buildServer() {
     origin:
       process.env.ENVIROMENT === "dev"
         ? "*"
-        : "https://www.tellarheaven.com.br",
+        : ["https://www.tellarheaven.com.br", "https://tellarheaven.com.br"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   });
 
